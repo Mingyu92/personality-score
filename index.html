@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>性格计分表 · 四型自评</title>
+<meta name="description" content="S 活泼型 / C 力量型 / M 完美型 / P 和平型，优点与缺点各二十行，逐行四选一，自动计分。">
+<meta name="theme-color" content="#f7f4ee">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23fffdf8'/%3E%3Ccircle cx='11' cy='11' r='4' fill='%23cf7a3f'/%3E%3Ccircle cx='21' cy='11' r='4' fill='%23bc4f3d'/%3E%3Ccircle cx='11' cy='21' r='4' fill='%233d6b9c'/%3E%3Ccircle cx='21' cy='21' r='4' fill='%234a8b73'/%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#f7f4ee;
+  --card:#fffdf8;
+  --ink:#221e18;
+  --ink-soft:#4a443b;
+  --muted:#8b8275;
+  --line:#e7e0d3;
+  --line-soft:#f1ebe1;
+  --head:#fbf7f0;
+  --s:#cf7a3f; --s-soft:#faeee2;
+  --c:#bc4f3d; --c-soft:#f8e8e4;
+  --m:#3d6b9c; --m-soft:#e8eff7;
+  --p:#4a8b73; --p-soft:#e5f0ea;
+  --serif:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",SimSun,Georgia,serif;
+  --head-h:47px;--mini-h:41px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+.t-S{--tone:var(--s);--tone-soft:var(--s-soft)}
+.t-C{--tone:var(--c);--tone-soft:var(--c-soft)}
+.t-M{--tone:var(--m);--tone-soft:var(--m-soft)}
+.t-P{--tone:var(--p);--tone-soft:var(--p-soft)}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(680px 380px at 12% -6%, rgba(207,122,63,.10), transparent 70%),
+    radial-gradient(720px 400px at 92% 2%, rgba(61,107,156,.09), transparent 70%);
+}
+.wrap{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:44px 22px 90px}
+
+/* ---------- 页头 ---------- */
+.head{margin-bottom:26px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:12px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
+}
+.dots{display:inline-flex;gap:4px}
+.dots i{width:6px;height:6px;border-radius:50%;display:block}
+.dots i:nth-child(1){background:var(--s)}
+.dots i:nth-child(2){background:var(--c)}
+.dots i:nth-child(3){background:var(--m)}
+.dots i:nth-child(4){background:var(--p)}
+h1{
+  font-family:var(--serif);font-weight:700;
+  font-size:clamp(32px,5.2vw,46px);line-height:1.18;letter-spacing:.05em;
+  margin:14px 0 12px;
+}
+.lede{margin:0;max-width:640px;color:var(--ink-soft);font-size:15px}
+.lede b{font-weight:600;color:var(--ink)}
+
+/* ---------- 通用卡片 ---------- */
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 1px 2px rgba(34,30,24,.03), 0 12px 34px -18px rgba(34,30,24,.18);
+  padding:22px 24px;
+}
+
+/* ---------- 工具栏 ---------- */
+.bar{
+  display:flex;flex-wrap:wrap;gap:16px 18px;align-items:center;justify-content:space-between;
+  margin-bottom:18px;
+}
+.field{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--muted)}
+.field input{
+  width:170px;padding:9px 12px;font:inherit;font-size:14px;color:var(--ink);
+  background:#fff;border:1px solid var(--line);border-radius:10px;outline:none;transition:.2s;
+}
+.field input::placeholder{color:#b8b0a2}
+.field input:focus{border-color:#c9bda8;box-shadow:0 0 0 3px rgba(207,122,63,.13)}
+.actions{display:flex;flex-wrap:wrap;gap:9px}
+.btn{
+  font:inherit;font-size:13.5px;padding:9px 16px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--line);background:#fff;color:var(--ink-soft);
+  transition:background .18s,border-color .18s,color .18s,transform .1s;
+}
+.btn:hover{background:#faf6ee;border-color:#d8cdb9;color:var(--ink)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:#2c2721;border-color:#2c2721;color:#fdfaf4}
+.btn.primary:hover{background:#3a342c;border-color:#3a342c;color:#fff}
+.btn.ghost{background:transparent;color:var(--muted)}
+.btn.ghost:hover{color:var(--c);border-color:#e6c9c3;background:#fdf5f3}
+.btn:focus-visible{outline:2px solid #2c2721;outline-offset:2px}
+
+/* ---------- 计分面板 ---------- */
+.board{margin-bottom:18px;padding:24px}
+.board-head{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-end;justify-content:space-between}
+.board h2{font-family:var(--serif);font-size:21px;font-weight:700;letter-spacing:.06em;margin:0}
+.hint{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
+.meter{flex:1 1 260px;max-width:420px}
+.meter-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted);margin-bottom:7px}
+.meter-row b{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-weight:600}
+.meter-track{height:6px;border-radius:99px;background:#efe8db;overflow:hidden}
+.meter-fill{
+  height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,#cf7a3f,#bc4f3d 45%,#3d6b9c 78%,#4a8b73);
+  transition:width .45s cubic-bezier(.2,.7,.2,1);
+}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.stat{
+  position:relative;padding:16px 16px 15px;border-radius:15px;
+  background:#fff;border:1px solid var(--line-soft);
+  transition:border-color .25s,background .25s,box-shadow .25s;
+}
+.stat.top{border-color:var(--tone);background:linear-gradient(180deg,var(--tone-soft),#fff 78%)}
+.stat-top{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.badge{
+  width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  font-size:12.5px;font-weight:700;letter-spacing:.02em;
+  color:var(--tone);background:var(--tone-soft);
+}
+.stat.top .badge{color:#fff;background:var(--tone)}
+.stat-name{font-size:13.5px;color:var(--ink-soft);letter-spacing:.04em}
+.stat .num{
+  font-size:34px;font-weight:600;line-height:1;letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.stat .num small{font-size:13px;font-weight:400;color:var(--muted);margin-left:5px;letter-spacing:0}
+.stat .sub{font-size:12px;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+.stat .track{height:5px;border-radius:99px;background:#f0eade;margin-top:12px;overflow:hidden}
+.stat .track i{display:block;height:100%;width:0;border-radius:99px;background:var(--tone);transition:width .5s cubic-bezier(.2,.7,.2,1)}
+
+.verdict{
+  display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;
+  margin-top:20px;padding:14px 18px;border-radius:13px;
+  background:#faf7f0;border:1px solid var(--line-soft);
+  border-left:3px solid var(--tone,var(--line));
+}
+.verdict-label{font-size:11.5px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.verdict-main{font-family:var(--serif);font-size:19px;font-weight:700;letter-spacing:.06em;color:var(--tone,var(--ink))}
+.verdict-desc{flex:1 1 320px;margin:0;font-size:13px;color:var(--muted)}
+
+/* ---------- 表格 ---------- */
+.sheet{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:clip;
+  box-shadow:0 1px 2px rgba(34,30,24,.03), 0 12px 34px -18px rgba(34,30,24,.18);
+}
+.tablewrap{overflow:visible}
+table{width:100%;min-width:720px;border-collapse:separate;border-spacing:0}
+thead th{
+  position:sticky;top:0;z-index:4;
+  background:var(--head);text-align:left;font-weight:600;font-size:13px;letter-spacing:.05em;
+  color:var(--ink-soft);padding:13px 14px;border-bottom:1px solid var(--line);
+  white-space:nowrap;transition:top .3s cubic-bezier(.2,.7,.2,1);
+}
+body.mini-on thead th{top:var(--mini-h)}
+thead th .chip{
+  display:inline-grid;place-items:center;width:21px;height:21px;border-radius:6px;margin-right:7px;
+  font-size:11px;font-weight:700;color:#fff;background:var(--tone);vertical-align:-4px;
+}
+thead th.idx{color:var(--muted);width:46px;text-align:center;font-weight:500}
+tbody td{border-bottom:1px solid var(--line-soft);padding:0}
+tbody tr:last-child td{border-bottom:0}
+td.idx{
+  position:sticky;left:0;z-index:2;background:var(--head);
+  text-align:center;color:#b3aa9a;font-size:12.5px;font-variant-numeric:tabular-nums;
+  border-right:1px solid var(--line-soft);
+}
+td.cell{width:23%}
+td.cell label{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;min-height:44px;cursor:pointer;transition:background .16s;
+}
+td.cell:hover label{background:#faf6ee}
+td.cell.on label{background:var(--tone-soft)}
+td.cell .word{color:var(--ink-soft);font-size:14px;transition:color .16s}
+td.cell.on .word{color:var(--tone);font-weight:600}
+td.cell .tag{display:none}
+
+input[type=checkbox]{
+  appearance:none;-webkit-appearance:none;flex:none;margin:0;
+  width:16px;height:16px;border-radius:50%;border:1.5px solid #d5ccbb;background:#fff;
+  cursor:pointer;position:relative;transition:background .16s,border-color .16s,box-shadow .16s;
+}
+input[type=checkbox]:hover{border-color:var(--tone)}
+input[type=checkbox]:checked{background:var(--tone);border-color:var(--tone)}
+input[type=checkbox]:checked::after{
+  content:"";position:absolute;inset:0;margin:auto;width:6px;height:6px;border-radius:50%;background:#fff;
+}
+input[type=checkbox]:focus-visible{outline:none;box-shadow:0 0 0 3px var(--tone-soft),0 0 0 4.5px var(--tone)}
+
+tr.band td{
+  position:sticky;top:var(--head-h);z-index:3;
+  background:#f4eee3;padding:10px 14px;border-bottom:1px solid var(--line);
+  transition:top .3s cubic-bezier(.2,.7,.2,1);
+}
+body.mini-on tr.band td{top:calc(var(--mini-h) + var(--head-h))}
+.band-title{font-size:13px;font-weight:700;letter-spacing:.24em;color:#6f6454}
+.band-sub{font-size:12px;color:#a2977f;margin-left:12px;letter-spacing:.02em}
+
+/* ---------- 页脚 ---------- */
+.foot{margin-top:18px;padding:0 4px;font-size:12.5px;color:var(--muted);line-height:1.9}
+.foot strong{color:var(--ink-soft);font-weight:600}
+
+/* ---------- 滚动浮动条 ---------- */
+.mini{
+  position:fixed;left:0;right:0;top:0;z-index:20;
+  transform:translateY(-105%);transition:transform .3s cubic-bezier(.2,.7,.2,1);
+  background:rgba(255,253,248,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.mini.show{transform:none}
+.mini-inner{
+  position:relative;max-width:1160px;margin:0 auto;padding:10px 22px;
+  display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--muted);
+}
+.mini-inner b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.mini .sp{flex:1}
+.mini-track{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:transparent;overflow:hidden}
+.mini-fill{height:100%;width:0;background:#bc4f3d;transition:width .4s,background .3s}
+
+/* ---------- 响应式 ---------- */
+@media(max-width:860px){
+  :root{--head-h:42px}
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .wrap{padding:30px 16px 70px}
+  .board{padding:18px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat{padding:13px}
+  .stat .num{font-size:28px}
+  .card{padding:18px;border-radius:16px}
+  .bar{gap:12px}
+  .field{width:100%}
+  .field input{flex:1;width:auto}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+  .btn{text-align:center;padding:10px 12px}
+  table{min-width:600px}
+  td.cell .tag{
+    display:inline-grid;place-items:center;width:16px;height:16px;border-radius:5px;
+    font-size:9.5px;font-weight:700;color:#fff;background:var(--tone);opacity:.85;
+  }
+  td.cell .word{font-size:13.5px}
+  thead th{font-size:12px;padding:11px 10px}
+}
+@media(max-width:420px){
+  h1{font-size:30px}
+  .verdict{padding:12px 14px}
+}
+
+@media screen and (max-width:720px){
+  .tablewrap{overflow:visible}
+  table{display:block;min-width:0}
+  thead{display:none}
+  tbody{display:block}
+  tbody tr:not(.band){
+    display:grid;grid-template-columns:1fr 1fr;gap:8px;
+    padding:11px 12px;border-bottom:1px solid var(--line-soft);
+  }
+  tbody tr:last-child{border-bottom:0}
+  td.idx{
+    grid-column:1/-1;display:block;position:static;width:auto;
+    background:none;border:0;text-align:left;padding:0 2px 1px;
+    font-size:11px;letter-spacing:.16em;color:#bdb3a2;
+  }
+  td.cell{display:block;width:auto;border:1px solid var(--line);border-radius:11px;background:#fff;transition:border-color .16s,background .16s}
+  td.cell label{padding:9px 11px;min-height:0;gap:8px;border-radius:10px}
+  td.cell label .word{flex:1;order:2}
+  td.cell label input{order:3}
+  td.cell:hover label{background:transparent}
+  td.cell.on{border-color:var(--tone)}
+  td.cell.on label{background:var(--tone-soft)}
+  td.cell .tag{display:inline-grid;order:1}
+  tr.band{display:block;border-bottom:0}
+  tr.band td{display:block;position:static;padding:13px 12px 11px;border:0}
+}
+
+/* ---------- 打印 ---------- */
+@media print{
+  @page{margin:12mm}
+  body{background:#fff}
+  body::before{display:none}
+  .wrap{padding:0;max-width:none}
+  .mini,.bar,.no-print{display:none!important}
+  .card,.sheet{box-shadow:none;border-radius:0;border-color:#ddd}
+  .board{padding:0 0 8px;border:0;background:none}
+  .stats{gap:8px;margin-top:10px}
+  .stat{padding:8px 10px;break-inside:avoid}
+  .stat .num{font-size:22px}
+  .tablewrap{overflow:visible}
+  table{min-width:0;font-size:9.5pt}
+  thead th{position:static;padding:4px 6px}
+  td.cell label{padding:2px 8px;min-height:0}
+  td.cell .word{font-size:9.5pt}
+  td.cell .tag{display:none!important}
+  td.idx{font-size:8.5pt}
+  input[type=checkbox]{width:11px;height:11px}
+  input[type=checkbox]:checked::after{width:4px;height:4px}
+  tr{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <div class="eyebrow"><span class="dots"><i></i><i></i><i></i><i></i></span>性格解析 · 四型自评</div>
+    <h1>性格计分表</h1>
+    <p class="lede">参考《性格解析》整理：<b>S 活泼型</b>、<b>C 力量型</b>、<b>M 完美型</b>、<b>P 和平型</b>。优点、缺点各二十行，每行只选一项，勾完自看得分。</p>
+  </header>
+
+  <section class="card bar no-print">
+    <label class="field">填写人
+      <input id="person" type="text" placeholder="姓名（可选）" autocomplete="off">
+    </label>
+    <div class="actions">
+      <button class="btn primary" type="button" onclick="downloadJSON()">导出结果</button>
+      <button class="btn" type="button" onclick="copySummary(this)">复制摘要</button>
+      <button class="btn" type="button" onclick="window.print()">打印 / 存 PDF</button>
+      <button class="btn ghost" type="button" onclick="resetAll()">清空</button>
+    </div>
+  </section>
+
+  <section class="card board" id="board">
+    <div class="board-head">
+      <div>
+        <h2>实时计分</h2>
+        <p class="hint">综合分 = 优点勾选数 + 缺点勾选数</p>
+      </div>
+      <div class="meter">
+        <div class="meter-row"><span>完成进度</span><span><b id="progNum">0</b> / 40 行</span></div>
+        <div class="meter-track"><div class="meter-fill" id="progFill"></div></div>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="verdict" id="verdict">
+      <span class="verdict-label">当前倾向</span>
+      <span class="verdict-main" id="verdictMain">尚未选择</span>
+      <p class="verdict-desc" id="verdictDesc">勾选任意一行后，这里会显示得分最高的类型。</p>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="idx">#</th>
+            <th class="t-S"><span class="chip">S</span>活泼型</th>
+            <th class="t-C"><span class="chip">C</span>力量型</th>
+            <th class="t-M"><span class="chip">M</span>完美型</th>
+            <th class="t-P"><span class="chip">P</span>和平型</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p><strong>怎么看结果：</strong>四个分数里最高的那一型，就是你的主要性格倾向；第二名是副倾向。分数接近说明两种特质并存。</p>
+    <p>数据只存在这台设备的浏览器里，不上传任何地方；导出 JSON 或打印 PDF 才是把结果带走的办法。</p>
+    <p class="no-print">这是一份倾向统计，不是心理诊断。描述整理自所用书籍截图，个别字词或有出入。</p>
+  </footer>
+
+</div>
+
+<div class="mini no-print" id="mini">
+  <div class="mini-inner">
+    <span>已完成 <b id="miniNum">0</b> / 40 行</span>
+    <span class="sp"></span>
+    <span id="miniTop">尚未选择</span>
+    <div class="mini-track"><div class="mini-fill" id="miniFill"></div></div>
+  </div>
+</div>
+
+<script>
+/* ---------------- 数据 ---------------- */
+const pos=[
+['生动','富于冒险','善于分析','适应力强'],
+['喜好娱乐','善于说服','坚持不懈','平和'],
+['善于社交','意志坚定','自我牺牲','顺服'],
+['使人认同','竞争性','体贴','自控性'],
+['使人振作','善于应变','受尊重','含蓄'],
+['生气勃勃','自立','敏感','满足'],
+['推动者','积极','计划者','耐性'],
+['无拘无束','肯定','有时间性','羞涩'],
+['乐观','坦率','井井有条','迁就'],
+['有趣','强迫性','忠诚','友善'],
+['可爱','勇敢','注意细节','外交手腕'],
+['令人高兴','自信','文化修养','贯彻始终'],
+['富激励性','独立','理想主义','无攻击性'],
+['感情外露','果断','深沉','尖刻幽默'],
+['喜交朋友','发起者','音乐性','调节者'],
+['多言','执着','考虑周到','容忍'],
+['活力充沛','领导者','忠心','聆听者'],
+['惹人喜爱','首领','制图者','知足'],
+['受欢迎','勤劳','完美主义者','和气'],
+['跳跃型','无畏','规范型','平衡']
+];
+const neg=[
+['露骨','专横','扭捏','乏味'],
+['散漫','无同情心','不宽恕','缺乏热情'],
+['唠叨','逆反','怨恨','保留'],
+['健忘','率直','挑剔','胆小'],
+['好插嘴','急躁','无安全感','优柔寡断'],
+['难预测','缺同情心','不受欢迎','不参与'],
+['即兴','固执','难于取悦','犹豫不决'],
+['放任','自负','悲观','平淡'],
+['易怒','好争吵','孤芳自赏','无目标'],
+['天真','鲁莽','消极','冷漠'],
+['喜获认同','工作狂','不善交际','担忧'],
+['喋喋不休','不圆滑老练','过分敏感','胆怯'],
+['生活紊乱','跋扈','抑郁','踌躇'],
+['缺乏毅力','不容忍','内向','无异议'],
+['杂乱无章','喜操纵','情绪化','喃喃自语'],
+['好表现','顽固','有戒心','缓慢'],
+['大嗓门','统治欲','孤僻','懒惰'],
+['不专注','易怒','多疑','拖延'],
+['烦躁','轻率','报复型','勉强'],
+['善变','狡猾','好批评','妥协']
+];
+
+const TYPES=[
+  {k:'S',name:'活泼型',desc:'热情外向、气氛担当，表达力强；要留意持久与条理。'},
+  {k:'C',name:'力量型',desc:'目标导向、果断高效，天生的推动者；要留意倾听与柔软。'},
+  {k:'M',name:'完美型',desc:'严谨细致、标准很高，做事讲究品质；要留意放过自己。'},
+  {k:'P',name:'和平型',desc:'温和稳定、善于倾听，团队的黏合剂；要留意表达立场。'}
+];
+
+const KEY='personality_picks_v2', NAME_KEY='personality_name_v2';
+const TOTAL=pos.length+neg.length;
+
+let picks={};
+try{ picks=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ picks={}; }
+
+const $=id=>document.getElementById(id);
+const rows=$('rows'), stats=$('stats');
+
+/* ---------------- 渲染表格 ---------------- */
+function draw(){
+  let html='';
+  [['优点','p',pos],['缺点','n',neg]].forEach(([title,prefix,data])=>{
+    html+='<tr class="band"><td colspan="5"><span class="band-title">'+title+'</span>'
+        + '<span class="band-sub">每行选一项 · 共 '+data.length+' 行</span></td></tr>';
+    data.forEach((words,i)=>{
+      const key=prefix+i;
+      html+='<tr>';
+      html+='<td class="idx">'+(i+1)+'</td>';
+      words.forEach((word,j)=>{
+        const on=picks[key]===j, t=TYPES[j].k;
+        html+='<td class="cell t-'+t+(on?' on':'')+'">'
+            + '<label><input type="checkbox" data-key="'+key+'" data-v="'+j+'"'+(on?' checked':'')+'>'
+            + '<span class="word">'+word+'</span><i class="tag">'+t+'</i></label></td>';
+      });
+      html+='</tr>';
+    });
+  });
+  rows.innerHTML=html;
+}
+
+/* ---------------- 选择 ---------------- */
+rows.addEventListener('change',e=>{
+  const input=e.target;
+  if(!input.matches('input[type=checkbox]')) return;
+  const key=input.dataset.key, v=+input.dataset.v, tr=input.closest('tr');
+
+  if(input.checked){
+    tr.querySelectorAll('input[type=checkbox]').forEach(o=>{ if(o!==input) o.checked=false; });
+    picks[key]=v;
+  }else{
+    delete picks[key];
+  }
+
+  tr.querySelectorAll('td.cell').forEach(td=>{
+    const cb=td.querySelector('input');
+    td.classList.toggle('on', !!cb && cb.checked);
+  });
+
+  save(); score();
+});
+
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(picks)); }catch(e){} }
+
+/* ---------------- 计分 ---------------- */
+function tally(){
+  const p=[0,0,0,0], n=[0,0,0,0];
+  for(const k in picks){
+    const v=picks[k];
+    if(!(v>=0&&v<4)) continue;
+    (k[0]==='p'?p:n)[v]++;
+  }
+  return {p,n,sum:p.map((x,i)=>x+n[i])};
+}
+
+function score(){
+  const {p,n,sum}=tally();
+  const done=Object.keys(picks).length;
+  const top=Math.max(...sum);
+  const peak=Math.max(top,1);
+
+  stats.innerHTML=TYPES.map((t,i)=>
+    '<div class="stat t-'+t.k+(done&&sum[i]===top?' top':'')+'">'
+    + '<div class="stat-top"><span class="badge">'+t.k+'</span><span class="stat-name">'+t.name+'</span></div>'
+    + '<div class="num">'+sum[i]+'<small>/ 40</small></div>'
+    + '<div class="sub">优点 '+p[i]+' · 缺点 '+n[i]+'</div>'
+    + '<div class="track"><i style="width:'+Math.round(sum[i]/peak*100)+'%"></i></div>'
+    + '</div>'
+  ).join('');
+
+  $('progNum').textContent=done;
+  $('progFill').style.width=(done/TOTAL*100)+'%';
+  $('miniNum').textContent=done;
+  $('miniFill').style.width=(done/TOTAL*100)+'%';
+
+  const verdict=$('verdict');
+  if(!done){
+    $('verdictMain').textContent='尚未选择';
+    $('verdictDesc').textContent='勾选任意一行后，这里会显示得分最高的类型。';
+    verdict.style.removeProperty('--tone');
+    $('miniTop').textContent='尚未选择';
+    return;
+  }
+
+  const winners=TYPES.filter((t,i)=>sum[i]===top);
+  $('verdictMain').textContent=winners.map(t=>t.k+' '+t.name).join('、')+(winners.length>1?' 并列':'');
+  $('verdictDesc').textContent=winners.length>1
+    ? '这几型得分相同，说明两种特质在你的选择里势均力敌。'
+    : winners[0].desc;
+  verdict.style.setProperty('--tone','var(--'+winners[0].k.toLowerCase()+')');
+  $('miniTop').textContent='最高：'+winners.map(t=>t.k+' '+t.name).join('、');
+}
+
+/* ---------------- 导出 ---------------- */
+function pickList(){
+  const out=[];
+  [['优点','p',pos],['缺点','n',neg]].forEach(([section,prefix,data])=>{
+    data.forEach((words,i)=>{
+      const v=picks[prefix+i];
+      if(v>=0&&v<4) out.push({部分:section,序号:i+1,选择:words[v],类型:TYPES[v].k});
+    });
+  });
+  return out;
+}
+
+function downloadJSON(){
+  const {p,n,sum}=tally();
+  const data={
+    姓名:$('person').value.trim()||'（未填写）',
+    导出时间:new Date().toLocaleString('zh-CN'),
+    完成行数:Object.keys(picks).length+' / '+TOTAL,
+    计分:Object.fromEntries(TYPES.map((t,i)=>[t.k+' '+t.name,{优点:p[i],缺点:n[i],合计:sum[i]}])),
+    逐项选择:pickList()
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='性格计分表-'+(data.姓名==='（未填写）'?'未署名':data.姓名)+'.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+function summaryText(){
+  const {p,n,sum}=tally();
+  const top=Math.max(...sum);
+  const winners=TYPES.filter((t,i)=>sum[i]===top);
+  const lines=[
+    '性格计分表',
+    '姓名：'+($('person').value.trim()||'未填写'),
+    '完成：'+Object.keys(picks).length+' / '+TOTAL+' 行',
+    ''
+  ];
+  TYPES.forEach((t,i)=>lines.push(t.k+' '+t.name+'　'+sum[i]+' 分（优点 '+p[i]+'，缺点 '+n[i]+'）'));
+  lines.push('');
+  lines.push(Object.keys(picks).length
+    ? '最高倾向：'+winners.map(t=>t.k+' '+t.name).join('、')
+    : '最高倾向：尚未选择');
+  return lines.join('\n');
+}
+
+async function copySummary(btn){
+  const text=summaryText();
+  let ok=false;
+  try{
+    await navigator.clipboard.writeText(text);
+    ok=true;
+  }catch(e){
+    const ta=document.createElement('textarea');
+    ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ ok=document.execCommand('copy'); }catch(_){}
+    document.body.removeChild(ta);
+  }
+  if(btn){
+    const old=btn.textContent;
+    btn.textContent=ok?'已复制':'复制失败';
+    setTimeout(()=>btn.textContent=old,1400);
+  }
+}
+
+function resetAll(){
+  if(!confirm('确定清空全部勾选吗？此操作无法撤销。')) return;
+  picks={};
+  localStorage.removeItem(KEY);
+  draw(); score();
+}
+
+/* ---------------- 初始化 ---------------- */
+$('person').value=localStorage.getItem(NAME_KEY)||'';
+$('person').addEventListener('input',e=>{
+  try{ localStorage.setItem(NAME_KEY,e.target.value); }catch(_){}
+});
+
+const board=$('board'), mini=$('mini');
+let ticking=false;
+function onScroll(){
+  if(ticking) return;
+  ticking=true;
+  requestAnimationFrame(()=>{
+    const passed=window.scrollY>(board.offsetTop+board.offsetHeight-60);
+    mini.classList.toggle('show',passed);
+    document.body.classList.toggle('mini-on',passed);
+    ticking=false;
+  });
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+
+draw();
+score();
+onScroll();
+</script>
+</body>
+</html>
